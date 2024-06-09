@@ -6,13 +6,13 @@
 #    By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/23 21:20:35 by danbarbo          #+#    #+#              #
-#    Updated: 2024/06/08 22:11:33 by danbarbo         ###   ########.fr        #
+#    Updated: 2024/06/08 22:46:50 by danbarbo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= philo
-# CFLAGS		:= -Wextra -Wall -Werror -g3
-CFLAGS		:= -g3
+# CFLAGS		:= -Wextra -Wall -Werror -g3 -pthread
+CFLAGS		:= -g3 -pthread
 
 HEADERS		:= -I include
 
@@ -23,11 +23,11 @@ all: ${NAME}
 bonus: all
 
 ${NAME}: ${OBJS}
-	@${CC} ${CFLAGS} ${HEADERS} ${OBJS} -o ${NAME}
+	@cc ${CFLAGS} ${HEADERS} ${OBJS} -o ${NAME}
 
 obj/%.o: src/%.c
 	@mkdir -p ${dir $@}
-	@${CC} ${CFLAGS} -c ${HEADERS} $< -o $@
+	@cc ${CFLAGS} -c ${HEADERS} $< -o $@
 	@printf "Compiling: ${notdir $<}\n"
 
 clean:

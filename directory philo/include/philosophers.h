@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:12:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/08 22:19:46 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/08 22:34:28 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define PHILOSOPHERS_H
 
 # include <pthread.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
 
 typedef struct s_philo
 {
