@@ -6,7 +6,7 @@
 #    By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/23 21:20:35 by danbarbo          #+#    #+#              #
-#    Updated: 2024/06/08 22:46:50 by danbarbo         ###   ########.fr        #
+#    Updated: 2024/06/08 23:43:05 by danbarbo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,15 +36,17 @@ clean:
 fclean: clean
 	@rm -f ${NAME}
 
-val: readline.supp all
-	@valgrind -q --suppressions=readline.supp \
-				--leak-check=full \
+val: all
+	@valgrind -q --leak-check=full \
 				--show-leak-kinds=all \
 				--track-origins=yes \
 				--track-fds=yes \
 				--trace-children=yes \
 				--trace-children-skip='*/bin/*,*/sbin/*,/usr/bin/*' \
-				--tool=helgrind \
+				./${NAME}
+
+hell: all
+	@valgrind -q --tool=helgrind \
 				--tool=drd \
 				./${NAME}
 

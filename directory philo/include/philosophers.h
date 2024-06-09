@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:12:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/08 22:34:28 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/08 23:27:28 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct s_philo
 	// long long		last_eat;
 	// pthread_t		thread;
 	// pthread_mutex_t	*forks;
-	// pthread_mutex_t	*print;
+	pthread_mutex_t	*print;
 	// pthread_mutex_t	*death;
 }	t_philo;
 

@@ -5,4 +5,10 @@ all:
 fclean:
 	@make -C "directory philo" fclean
 
+val:
+	@make -C "directory philo" val
+
+hell:
+	@make -C "directory philo" hell
+
 re: fclean all
