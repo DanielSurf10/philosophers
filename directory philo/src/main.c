@@ -6,124 +6,101 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:19:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/12 23:06:32 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/13 01:34:05 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	print_ms(t_timeval now, t_timeval start)
-{
-	long int	microseconds_now;
-	long int	microseconds_since_start;
-	long int	miliseconds_since_start;
-
-	microseconds_now = (now.tv_sec * 1000000) + now.tv_usec;
-	microseconds_since_start = microseconds_now - ((start.tv_sec * 1000000) + start.tv_usec);
-	miliseconds_since_start = microseconds_since_start / 1000;
-	printf("%li ", miliseconds_since_start);
-}
-
-void	*philosopher(void *arg)
-{
-	int				get_forks;
-	long int		microseconds_since_start;
-	long int		microseconds_now;
-	t_philo			philo;
-	t_timeval		now;
-	t_timeval		start;
-
-	philo = *(t_philo *) arg;
-
-	get_forks = 0;
-	while (get_forks == 0)
-	{
-		pthread_mutex_lock(philo.left_fork_mutex);
-		pthread_mutex_lock(philo.rigth_fork_mutex);
-		if (*philo.left_fork == 0 && *philo.right_fork == 0)
-		{
-			*philo.left_fork = 1;
-			*philo.right_fork = 1;
-			get_forks = 1;
-		}
-		pthread_mutex_unlock(philo.rigth_fork_mutex);
-		pthread_mutex_unlock(philo.left_fork_mutex);
-		usleep(50);
-	}
-
-	gettimeofday(&now, NULL);
-	start = philo.start;
-	pthread_mutex_lock(philo.print);
-	print_ms(now, start);
-	printf("Philosopher %i is eating\n", philo.id + 1);
-	pthread_mutex_unlock(philo.print);
-	usleep(200000);
-	pthread_mutex_lock(philo.left_fork_mutex);
-	pthread_mutex_lock(philo.rigth_fork_mutex);
-	*philo.left_fork = 0;
-	*philo.right_fork = 0;
-	pthread_mutex_unlock(philo.rigth_fork_mutex);
-	pthread_mutex_unlock(philo.left_fork_mutex);
-
-	gettimeofday(&now, NULL);
-	pthread_mutex_lock(philo.print);
-	print_ms(now, start);
-	printf("Philosopher %i is thinking\n", philo.id + 1);
-	pthread_mutex_unlock(philo.print);
-
-	return (NULL);
-}
+// ./philo <philo_number> <time_to_die> <time_to_eat> <time_to_sleep> [max_eat]
 
 int	main(int argc, char *argv[])
 {
-	int				philos_count = 2;
-	t_timeval		start;
-	t_philo			philos[philos_count];
-	// pthread_t		thread[philos_count];
-	pthread_mutex_t	print_mutex;
-	t_waiter		waiter;
+	int			i;
+	t_main_data	data;
 
-	pthread_mutex_init(&print_mutex, NULL);
-	gettimeofday(&start, NULL);
+	const int	philo_count = 4;
+	const int	time_to_die = 410;
+	const int	time_to_eat = 200;
+	const int	time_to_sleep = 200;
+	const int	max_eat_count = 7;
 
-	waiter.forks = malloc(sizeof(int) * philos_count);
-	memset(waiter.forks, 0, sizeof(int) * philos_count);
+	memset(&data, 0, sizeof(t_main_data));
+	data.philos_count = philo_count;			// Mudar aqui para pegar do argv já validado
+	gettimeofday(&data.start, NULL);
+	pthread_mutex_init(&data.print_mutex, NULL);
 
-	waiter.forks_mutex = malloc(sizeof(pthread_mutex_t) * philos_count);
+	data.waiter.forks = malloc(sizeof(int) * data.philos_count);
+	memset(data.waiter.forks, 0, sizeof(int) * data.philos_count);
 
-	for (int i = 0; i < philos_count; i++)
+	data.philos = malloc(sizeof(t_philo) * data.philos_count);
+	memset(data.philos, 0, sizeof(t_philo) * data.philos_count);
+
+	data.waiter.forks_mutex = malloc(sizeof(pthread_mutex_t) * data.philos_count);
+
+	i = 0;
+	while (i < data.philos_count)
 	{
-		// waiter.forks[i] = i;
-		pthread_mutex_init(&waiter.forks_mutex[i], NULL);
+		pthread_mutex_init(&data.waiter.forks_mutex[i], NULL);
+		pthread_mutex_init(&data.philos[i].philo_mutex, NULL);
+		i++;
 	}
 
-	for (int i = 0; i < philos_count; i++)
+	i = 0;
+	while (i < data.philos_count)
 	{
-		philos[i].id = i;
-		philos[i].print = &print_mutex;
-		philos[i].start = start;
-		philos[i].left_fork = &waiter.forks[(i + philos_count - 1) % philos_count];
-		philos[i].right_fork = &waiter.forks[i];
-		philos[i].left_fork_mutex = &waiter.forks_mutex[(i + philos_count - 1) % philos_count];
-		philos[i].rigth_fork_mutex = &waiter.forks_mutex[i];
+		// ID
+		data.philos[i].id = i;
 
-		pthread_create(&philos[i].thread, NULL, philosopher, &philos[i]);
+		// Pegar do argv
+		data.philos[i].time_to_eat = time_to_eat;			// Mudar aqui para pegar do argv já validado
+		data.philos[i].time_to_sleep = time_to_sleep;
+		data.philos[i].max_eat_count = max_eat_count;
+
+		// eat count
+		data.philos[i].left_philo_eat_count = &data.philos[(i + data.philos_count - 1) % data.philos_count].eat_count;
+		data.philos[i].right_philo_eat_count = &data.philos[i].eat_count;
+
+		// Forks
+		data.philos[i].left_fork = &data.waiter.forks[(i + data.philos_count - 1) % data.philos_count];
+		data.philos[i].right_fork = &data.waiter.forks[i];
+
+		// Começo da simulação
+		data.philos[i].start = data.start;
+		data.philos[i].last_eat = data.start;
+
+		// Mutex
+		data.philos[i].print = &data.print_mutex;
+		data.philos[i].left_fork_mutex = &data.waiter.forks_mutex[(i + data.philos_count - 1) % data.philos_count];
+		data.philos[i].right_fork_mutex = &data.waiter.forks_mutex[i];
+		data.philos[i].left_philo_mutex = &data.philos[(i + data.philos_count - 1) % data.philos_count].philo_mutex;
+		data.philos[i].right_philo_mutex = &data.philos[i].philo_mutex;
+
+		pthread_create(&data.philos[i].thread, NULL, philosopher, &data.philos[i]);
 		usleep(100);
+		i++;
 	}
 
-	for (int i = 0; i < philos_count; i++)
+	i = 0;
+	while (i < data.philos_count)
 	{
-		pthread_join(philos[i].thread, NULL);
+		pthread_join(data.philos[i].thread, NULL);
+		i++;
 	}
 
-	pthread_mutex_destroy(&print_mutex);
+	pthread_mutex_destroy(&data.print_mutex);
 
-	for (int i = 0; i < philos_count; i++)
+	i = 0;
+	while (i < data.philos_count)
 	{
-		pthread_mutex_destroy(&waiter.forks_mutex[i]);
+		pthread_mutex_destroy(&data.waiter.forks_mutex[i]);
+		pthread_mutex_destroy(&data.philos[i].philo_mutex);
+		i++;
 	}
 
-	free(waiter.forks);
+	free(data.waiter.forks);
+	free(data.waiter.forks_mutex);
+	free(data.philos);
 
 	return (0);
 }
