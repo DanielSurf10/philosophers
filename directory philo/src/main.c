@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:19:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/13 01:34:05 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:48:53 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@ int	main(int argc, char *argv[])
 	int			i;
 	t_main_data	data;
 
-	const int	philo_count = 4;
-	const int	time_to_die = 410;
-	const int	time_to_eat = 200;
-	const int	time_to_sleep = 200;
-	const int	max_eat_count = 7;
+	// NÃO PODE USAR A atoi()
+
+	const int	philo_count = atoi(argv[1]);
+	const int	time_to_die = atoi(argv[2]);
+	const int	time_to_eat = atoi(argv[3]);
+	const int	time_to_sleep = atoi(argv[4]);
+	const int	max_eat_count = argv[5] ? atoi(argv[5]) : -1;
 
 	memset(&data, 0, sizeof(t_main_data));
 	data.philos_count = philo_count;			// Mudar aqui para pegar do argv já validado
@@ -43,6 +45,7 @@ int	main(int argc, char *argv[])
 	{
 		pthread_mutex_init(&data.waiter.forks_mutex[i], NULL);
 		pthread_mutex_init(&data.philos[i].philo_mutex, NULL);
+		// data.philos[i].eat_count = i + 1;
 		i++;
 	}
 
@@ -59,7 +62,7 @@ int	main(int argc, char *argv[])
 
 		// eat count
 		data.philos[i].left_philo_eat_count = &data.philos[(i + data.philos_count - 1) % data.philos_count].eat_count;
-		data.philos[i].right_philo_eat_count = &data.philos[i].eat_count;
+		data.philos[i].right_philo_eat_count = &data.philos[(i + 1) % data.philos_count].eat_count;
 
 		// Forks
 		data.philos[i].left_fork = &data.waiter.forks[(i + data.philos_count - 1) % data.philos_count];
@@ -74,7 +77,7 @@ int	main(int argc, char *argv[])
 		data.philos[i].left_fork_mutex = &data.waiter.forks_mutex[(i + data.philos_count - 1) % data.philos_count];
 		data.philos[i].right_fork_mutex = &data.waiter.forks_mutex[i];
 		data.philos[i].left_philo_mutex = &data.philos[(i + data.philos_count - 1) % data.philos_count].philo_mutex;
-		data.philos[i].right_philo_mutex = &data.philos[i].philo_mutex;
+		data.philos[i].right_philo_mutex = &data.philos[(i + 1) % data.philos_count].philo_mutex;
 
 		pthread_create(&data.philos[i].thread, NULL, philosopher, &data.philos[i]);
 		usleep(100);

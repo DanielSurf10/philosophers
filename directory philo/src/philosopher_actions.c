@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 00:54:17 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/13 01:26:28 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:28:36 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,30 @@
 
 void	wait_for_adjacent_philosophers_to_eat(t_philo *philo)
 {
+	int	left_philo_eat_count;
+	int	right_philo_eat_count;
+	int	philo_eat_count;
 	int	adjacent_philosophers_have_eaten;
 
 	adjacent_philosophers_have_eaten = 0;
 	while (adjacent_philosophers_have_eaten == 0)
 	{
-		pthread_mutex_lock(&philo->philo_mutex);
 		pthread_mutex_lock(philo->left_philo_mutex);
-		pthread_mutex_lock(philo->right_philo_mutex);
+		left_philo_eat_count = *(philo->left_philo_eat_count);
+		pthread_mutex_unlock(philo->left_philo_mutex);
 
-		if (*philo->left_philo_eat_count >= philo->eat_count
-			&& *philo->right_philo_eat_count >= philo->eat_count)
+		pthread_mutex_lock(philo->right_philo_mutex);
+		right_philo_eat_count = *(philo->right_philo_eat_count);
+		pthread_mutex_unlock(philo->right_philo_mutex);
+
+		pthread_mutex_lock(&philo->philo_mutex);
+		philo_eat_count = philo->eat_count;
+		pthread_mutex_unlock(&philo->philo_mutex);
+
+		if (left_philo_eat_count >= philo_eat_count
+			&& right_philo_eat_count >= philo_eat_count)
 				adjacent_philosophers_have_eaten = 1;
 
-		pthread_mutex_unlock(philo->right_philo_mutex);
-		pthread_mutex_unlock(philo->left_philo_mutex);
-		pthread_mutex_unlock(&philo->philo_mutex);
 		usleep(50);
 	}
 }
@@ -44,14 +52,19 @@ void	wait_for_getting_forks(t_philo *philo)
 		// Ele vai morrer aqui se esperar demais pelo garfo
 
 		pthread_mutex_lock(philo->left_fork_mutex);
+
 		pthread_mutex_lock(philo->right_fork_mutex);
+
+
 		if (*philo->left_fork == 0 && *philo->right_fork == 0)
 		{
 			*philo->left_fork = 1;
 			*philo->right_fork = 1;
 			get_forks = 1;
 		}
+
 		pthread_mutex_unlock(philo->right_fork_mutex);
+
 		pthread_mutex_unlock(philo->left_fork_mutex);
 		usleep(50);
 	}
@@ -71,11 +84,16 @@ void	eat(t_philo *philo)
 	printf("%i taken a fork\n", philo->id + 1);
 	pthread_mutex_unlock(philo->print);
 	usleep(philo->time_to_eat * 1000);
+
 	pthread_mutex_lock(philo->left_fork_mutex);
+
 	pthread_mutex_lock(philo->right_fork_mutex);
+
 	*philo->left_fork = 0;
 	*philo->right_fork = 0;
+
 	pthread_mutex_unlock(philo->right_fork_mutex);
+
 	pthread_mutex_unlock(philo->left_fork_mutex);
 }
 
