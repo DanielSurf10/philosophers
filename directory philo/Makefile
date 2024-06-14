@@ -6,7 +6,7 @@
 #    By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/23 21:20:35 by danbarbo          #+#    #+#              #
-#    Updated: 2024/06/08 23:43:05 by danbarbo         ###   ########.fr        #
+#    Updated: 2024/06/13 23:31:21 by danbarbo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ bonus: all
 ${NAME}: ${OBJS}
 	@cc ${CFLAGS} ${HEADERS} ${OBJS} -o ${NAME}
 
-obj/%.o: src/%.c
+obj/%.o: src/%.c include/philosophers.h
 	@mkdir -p ${dir $@}
 	@cc ${CFLAGS} -c ${HEADERS} $< -o $@
 	@printf "Compiling: ${notdir $<}\n"
@@ -48,7 +48,7 @@ val: all
 hell: all
 	@valgrind -q --tool=helgrind \
 				--tool=drd \
-				./${NAME}
+				./${NAME} 4 310 200 100
 
 re: fclean all
 

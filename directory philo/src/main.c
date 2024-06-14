@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:19:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/13 16:48:53 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/14 00:12:29 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,13 @@ int	main(int argc, char *argv[])
 		data.philos[i].id = i;
 
 		// Pegar do argv
+		data.philos[i].time_to_die = time_to_die;
 		data.philos[i].time_to_eat = time_to_eat;			// Mudar aqui para pegar do argv já validado
 		data.philos[i].time_to_sleep = time_to_sleep;
 		data.philos[i].max_eat_count = max_eat_count;
+
+		// lógica de morrer
+		data.philos[i].someone_died = &data.someone_died;
 
 		// eat count
 		data.philos[i].left_philo_eat_count = &data.philos[(i + data.philos_count - 1) % data.philos_count].eat_count;
@@ -83,6 +87,9 @@ int	main(int argc, char *argv[])
 		usleep(100);
 		i++;
 	}
+
+	wait_until_someone_finish_or_die(&data);
+
 
 	i = 0;
 	while (i < data.philos_count)
