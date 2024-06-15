@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:12:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/13 22:57:44 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/15 16:31:29 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,19 @@
 # include <string.h>
 # include <sys/time.h>
 
+enum e_status
+{
+	EAT,
+	THINK,
+	SLEEP
+};
+
 typedef struct timeval t_timeval;
 
 typedef struct s_philo
 {
 	int				id;
+	int				philos_count;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -32,11 +40,12 @@ typedef struct s_philo
 	int				eat_count;
 	int				*left_philo_eat_count;		// Ponteiro para o eat count do philo da esquerda
 	int				*right_philo_eat_count;		// Ponteiro para o eat count do philo da direita
-	int				*left_fork;
-	int				*right_fork;				// Ponteiro para um fork do array de forks
+	// int				*left_fork;
+	// int				*right_fork;				// Ponteiro para um fork do array de forks
 	int				*someone_died;
 	t_timeval		start;
 	t_timeval		last_eat;
+	// t_timeval		now;
 	pthread_t		thread;
 	pthread_mutex_t	philo_mutex;
 	pthread_mutex_t	*print;
@@ -46,36 +55,32 @@ typedef struct s_philo
 	pthread_mutex_t	*right_philo_mutex;			// Ponteiro para um mutex do philo da direita
 }	t_philo;
 
-typedef struct s_waiter
-{
-	int				*forks;					// Array de forks
-	pthread_mutex_t	*forks_mutex;			// Array de mutex dos forks
-}	t_waiter;
-
 typedef struct s_main_data
 {
 	int				philos_count;
 	int				someone_died;
-	t_timeval		start;
+	int				*forks;					// Array de forks
 	t_philo			*philos;
-	t_waiter		waiter;
+	pthread_mutex_t	*forks_mutex;			// Array de mutex dos forks
 	pthread_mutex_t	print_mutex;
+	t_timeval		start;
 }	t_main_data;
 
 // philospher function
 void	*philosopher(void *arg);
 
 // philosophers actions
-void	wait_for_adjacent_philosophers_to_eat(t_philo *philo);
-void	wait_for_getting_forks(t_philo *philo);
+// void	wait_for_adjacent_philosophers_to_eat(t_philo *philo);
+void	get_forks(t_philo *philo);
 void	eat(t_philo *philo);
 void	philo_sleep(t_philo *philo);
-void	start_to_think(t_philo *philo);
+void	think(t_philo *philo);
 
 // die logic
 void	wait_until_someone_finish_or_die(t_main_data *data);
 
 // utils
 void	print_ms(t_timeval now, t_timeval start);
+void	print_mutex(t_philo *philo, int status);
 
 #endif

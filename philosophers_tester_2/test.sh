@@ -8,8 +8,8 @@ MAKEFILE_PATH="philo_"
 # BONUS_MAKEFILE_PATH=philo_bonus
 
 ## TEST PARAMETERS - CHANGE AS NEEDED
-NB_OF_TESTS=1
-RESULTS_FOLDER='test_results'
+NB_OF_TESTS=2
+RESULTS_FOLDER='/tmp/test_results'
 
 ## TEST FUNCTION DEFINITION
 run_test_case() {

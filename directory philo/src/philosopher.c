@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 00:13:14 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/14 00:03:27 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/15 16:30:55 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,40 +22,39 @@ void	*philosopher(void *arg)
 	philo = (t_philo *) arg;
 	cycle_count = 0;
 	someone_died = 0;
-	while ((cycle_count < philo->max_eat_count || philo->max_eat_count == -1) && someone_died == 0)
+	while ((cycle_count < philo->max_eat_count || philo->max_eat_count == -1)
+		&& someone_died == 0 && philo->philos_count > 1)
 	{
-
-		wait_for_adjacent_philosophers_to_eat(philo);
-
-		wait_for_getting_forks(philo);
-
-		gettimeofday(&now, NULL);
-
 		pthread_mutex_lock(&philo->philo_mutex);
-		philo->last_eat = now;
-		someone_died = *philo->someone_died;
+		// gettimeofday(&philo->now, NULL);
 		pthread_mutex_unlock(&philo->philo_mutex);
 
-		// Antes de comer, verificar se não morreu
-		if (someone_died == 0)
-			eat(philo);
+		get_forks(philo);
 
 		pthread_mutex_lock(&philo->philo_mutex);
+		gettimeofday(&philo->last_eat, NULL);
+		pthread_mutex_unlock(&philo->philo_mutex);
+
+		eat(philo);
+
+		// pthread_mutex_lock(&philo->philo_mutex);
+		// gettimeofday(&philo->now, NULL);
+		// pthread_mutex_unlock(&philo->philo_mutex);
+
+		philo_sleep(philo);
+
+		// pthread_mutex_lock(&philo->philo_mutex);
+		// gettimeofday(&philo->now, NULL);
+		// pthread_mutex_unlock(&philo->philo_mutex);
+
+		think(philo);
+
+		pthread_mutex_lock(&philo->philo_mutex);
+		someone_died = *philo->someone_died;
 		philo->eat_count++;
+		pthread_mutex_unlock(&philo->philo_mutex);
+
 		cycle_count++;
-		someone_died = *philo->someone_died;
-		pthread_mutex_unlock(&philo->philo_mutex);
-
-		if (someone_died == 0)
-			philo_sleep(philo);
-
-		pthread_mutex_lock(&philo->philo_mutex);
-		someone_died = *philo->someone_died;
-		pthread_mutex_unlock(&philo->philo_mutex);
-
-		if (someone_died == 0)
-			start_to_think(philo);
-
 	}
 
 	return (NULL);

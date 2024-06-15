@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:19:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/14 00:12:29 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/15 16:52:14 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,18 @@ int	main(int argc, char *argv[])
 	gettimeofday(&data.start, NULL);
 	pthread_mutex_init(&data.print_mutex, NULL);
 
-	data.waiter.forks = malloc(sizeof(int) * data.philos_count);
-	memset(data.waiter.forks, 0, sizeof(int) * data.philos_count);
+	// data.forks = malloc(sizeof(int) * data.philos_count);
+	// memset(data.forks, 0, sizeof(int) * data.philos_count);
 
 	data.philos = malloc(sizeof(t_philo) * data.philos_count);
 	memset(data.philos, 0, sizeof(t_philo) * data.philos_count);
 
-	data.waiter.forks_mutex = malloc(sizeof(pthread_mutex_t) * data.philos_count);
+	data.forks_mutex = malloc(sizeof(pthread_mutex_t) * data.philos_count);
 
 	i = 0;
 	while (i < data.philos_count)
 	{
-		pthread_mutex_init(&data.waiter.forks_mutex[i], NULL);
+		pthread_mutex_init(&data.forks_mutex[i], NULL);
 		pthread_mutex_init(&data.philos[i].philo_mutex, NULL);
 		// data.philos[i].eat_count = i + 1;
 		i++;
@@ -68,9 +68,9 @@ int	main(int argc, char *argv[])
 		data.philos[i].left_philo_eat_count = &data.philos[(i + data.philos_count - 1) % data.philos_count].eat_count;
 		data.philos[i].right_philo_eat_count = &data.philos[(i + 1) % data.philos_count].eat_count;
 
-		// Forks
-		data.philos[i].left_fork = &data.waiter.forks[(i + data.philos_count - 1) % data.philos_count];
-		data.philos[i].right_fork = &data.waiter.forks[i];
+		// // Forks
+		// data.philos[i].left_fork = &data.forks[(i + data.philos_count - 1) % data.philos_count];
+		// data.philos[i].right_fork = &data.forks[i];
 
 		// Começo da simulação
 		data.philos[i].start = data.start;
@@ -78,18 +78,19 @@ int	main(int argc, char *argv[])
 
 		// Mutex
 		data.philos[i].print = &data.print_mutex;
-		data.philos[i].left_fork_mutex = &data.waiter.forks_mutex[(i + data.philos_count - 1) % data.philos_count];
-		data.philos[i].right_fork_mutex = &data.waiter.forks_mutex[i];
+		data.philos[i].left_fork_mutex = &data.forks_mutex[(i + data.philos_count - 1) % data.philos_count];
+		data.philos[i].right_fork_mutex = &data.forks_mutex[i];
 		data.philos[i].left_philo_mutex = &data.philos[(i + data.philos_count - 1) % data.philos_count].philo_mutex;
 		data.philos[i].right_philo_mutex = &data.philos[(i + 1) % data.philos_count].philo_mutex;
 
+		data.philos[i].philos_count = data.philos_count;
+
 		pthread_create(&data.philos[i].thread, NULL, philosopher, &data.philos[i]);
-		usleep(100);
+		usleep(1000);
 		i++;
 	}
 
 	wait_until_someone_finish_or_die(&data);
-
 
 	i = 0;
 	while (i < data.philos_count)
@@ -103,13 +104,13 @@ int	main(int argc, char *argv[])
 	i = 0;
 	while (i < data.philos_count)
 	{
-		pthread_mutex_destroy(&data.waiter.forks_mutex[i]);
+		pthread_mutex_destroy(&data.forks_mutex[i]);
 		pthread_mutex_destroy(&data.philos[i].philo_mutex);
 		i++;
 	}
 
-	free(data.waiter.forks);
-	free(data.waiter.forks_mutex);
+	// free(data.forks);
+	free(data.forks_mutex);
 	free(data.philos);
 
 	return (0);

@@ -6,7 +6,7 @@
 #    By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/23 21:20:35 by danbarbo          #+#    #+#              #
-#    Updated: 2024/06/13 23:31:21 by danbarbo         ###   ########.fr        #
+#    Updated: 2024/06/15 16:50:38 by danbarbo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ val: all
 hell: all
 	@valgrind -q --tool=helgrind \
 				--tool=drd \
-				./${NAME} 4 310 200 100
+				./${NAME} 4 800 200 200 7
 
 re: fclean all
 

@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 22:24:26 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/13 23:55:45 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/15 10:04:18 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ void	wait_until_someone_finish_or_die(t_main_data *data)
 
 			i++;
 		}
+		usleep(1000);
 	}
 }
