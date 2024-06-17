@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:19:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/15 16:52:14 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/16 14:00:19 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,28 @@ int	main(int argc, char *argv[])
 	int			i;
 	t_main_data	data;
 
-	// NÃO PODE USAR A atoi()
+	if (!(argc >= 5 && argc <= 6))
+	{
+		write(2, "Invalid argument number!\n", 25);
+		return (1);
+	}
 
-	const int	philo_count = atoi(argv[1]);
-	const int	time_to_die = atoi(argv[2]);
-	const int	time_to_eat = atoi(argv[3]);
-	const int	time_to_sleep = atoi(argv[4]);
-	const int	max_eat_count = argv[5] ? atoi(argv[5]) : -1;
+	data = get_data(argv);
 
-	memset(&data, 0, sizeof(t_main_data));
-	data.philos_count = philo_count;			// Mudar aqui para pegar do argv já validado
-	gettimeofday(&data.start, NULL);
+	if (data.is_valid == 0)
+	{
+		write(2, "Invalid arguments!\n", 19);
+		return (1);
+	}
+
+	data.philos = malloc(sizeof(t_philo) * data.philos_count);
+	memset(data.philos, 0, sizeof(t_philo) * data.philos_count);
+
 	pthread_mutex_init(&data.print_mutex, NULL);
 
 	// data.forks = malloc(sizeof(int) * data.philos_count);
 	// memset(data.forks, 0, sizeof(int) * data.philos_count);
 
-	data.philos = malloc(sizeof(t_philo) * data.philos_count);
-	memset(data.philos, 0, sizeof(t_philo) * data.philos_count);
 
 	data.forks_mutex = malloc(sizeof(pthread_mutex_t) * data.philos_count);
 
@@ -56,17 +60,17 @@ int	main(int argc, char *argv[])
 		data.philos[i].id = i;
 
 		// Pegar do argv
-		data.philos[i].time_to_die = time_to_die;
-		data.philos[i].time_to_eat = time_to_eat;			// Mudar aqui para pegar do argv já validado
-		data.philos[i].time_to_sleep = time_to_sleep;
-		data.philos[i].max_eat_count = max_eat_count;
+		data.philos[i].time_to_die = data.time_to_die;
+		data.philos[i].time_to_eat = data.time_to_eat;
+		data.philos[i].time_to_sleep = data.time_to_sleep;
+		data.philos[i].max_eat_count = data.max_eat_count;
 
 		// lógica de morrer
 		data.philos[i].someone_died = &data.someone_died;
 
 		// eat count
-		data.philos[i].left_philo_eat_count = &data.philos[(i + data.philos_count - 1) % data.philos_count].eat_count;
-		data.philos[i].right_philo_eat_count = &data.philos[(i + 1) % data.philos_count].eat_count;
+		// data.philos[i].left_philo_eat_count = &data.philos[(i + data.philos_count - 1) % data.philos_count].eat_count;
+		// data.philos[i].right_philo_eat_count = &data.philos[(i + 1) % data.philos_count].eat_count;
 
 		// // Forks
 		// data.philos[i].left_fork = &data.forks[(i + data.philos_count - 1) % data.philos_count];
@@ -80,8 +84,8 @@ int	main(int argc, char *argv[])
 		data.philos[i].print = &data.print_mutex;
 		data.philos[i].left_fork_mutex = &data.forks_mutex[(i + data.philos_count - 1) % data.philos_count];
 		data.philos[i].right_fork_mutex = &data.forks_mutex[i];
-		data.philos[i].left_philo_mutex = &data.philos[(i + data.philos_count - 1) % data.philos_count].philo_mutex;
-		data.philos[i].right_philo_mutex = &data.philos[(i + 1) % data.philos_count].philo_mutex;
+		// data.philos[i].left_philo_mutex = &data.philos[(i + data.philos_count - 1) % data.philos_count].philo_mutex;
+		// data.philos[i].right_philo_mutex = &data.philos[(i + 1) % data.philos_count].philo_mutex;
 
 		data.philos[i].philos_count = data.philos_count;
 

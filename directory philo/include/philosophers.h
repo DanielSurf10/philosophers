@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:12:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/15 16:31:29 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/16 12:26:35 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ typedef struct s_philo
 	int				time_to_sleep;
 	int				max_eat_count;				// Se eat_count == max_eat -> Não precisa ver se morreu, pq ele já acabou
 	int				eat_count;
-	int				*left_philo_eat_count;		// Ponteiro para o eat count do philo da esquerda
-	int				*right_philo_eat_count;		// Ponteiro para o eat count do philo da direita
+	// int				*left_philo_eat_count;		// Ponteiro para o eat count do philo da esquerda
+	// int				*right_philo_eat_count;		// Ponteiro para o eat count do philo da direita
 	// int				*left_fork;
 	// int				*right_fork;				// Ponteiro para um fork do array de forks
 	int				*someone_died;
@@ -51,15 +51,20 @@ typedef struct s_philo
 	pthread_mutex_t	*print;
 	pthread_mutex_t	*left_fork_mutex;			// Ponteiro para um mutex do array de mutex dos forks
 	pthread_mutex_t	*right_fork_mutex;
-	pthread_mutex_t	*left_philo_mutex;			// Ponteiro para um mutex do philo da esquerda
-	pthread_mutex_t	*right_philo_mutex;			// Ponteiro para um mutex do philo da direita
+	// pthread_mutex_t	*left_philo_mutex;			// Ponteiro para um mutex do philo da esquerda
+	// pthread_mutex_t	*right_philo_mutex;			// Ponteiro para um mutex do philo da direita
 }	t_philo;
 
 typedef struct s_main_data
 {
+	int				is_valid;
 	int				philos_count;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				max_eat_count;
 	int				someone_died;
-	int				*forks;					// Array de forks
+	// int				*forks;					// Array de forks
 	t_philo			*philos;
 	pthread_mutex_t	*forks_mutex;			// Array de mutex dos forks
 	pthread_mutex_t	print_mutex;
@@ -79,8 +84,12 @@ void	think(t_philo *philo);
 // die logic
 void	wait_until_someone_finish_or_die(t_main_data *data);
 
+// validation
+t_main_data	get_data(char **argv);
+
 // utils
 void	print_ms(t_timeval now, t_timeval start);
 void	print_mutex(t_philo *philo, int status);
+int		ternary(int condition, int if_true, int if_false);
 
 #endif
