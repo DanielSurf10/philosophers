@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 00:13:14 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/15 16:30:55 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/17 20:07:14 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	*philosopher(void *arg)
 	while ((cycle_count < philo->max_eat_count || philo->max_eat_count == -1)
 		&& someone_died == 0 && philo->philos_count > 1)
 	{
-		pthread_mutex_lock(&philo->philo_mutex);
+		// pthread_mutex_lock(&philo->philo_mutex);
 		// gettimeofday(&philo->now, NULL);
-		pthread_mutex_unlock(&philo->philo_mutex);
+		// pthread_mutex_unlock(&philo->philo_mutex);
 
 		get_forks(philo);
 

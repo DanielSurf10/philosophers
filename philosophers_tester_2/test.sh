@@ -8,7 +8,7 @@ MAKEFILE_PATH="philo_"
 # BONUS_MAKEFILE_PATH=philo_bonus
 
 ## TEST PARAMETERS - CHANGE AS NEEDED
-NB_OF_TESTS=4
+NB_OF_TESTS=20
 RESULTS_FOLDER='/tmp/test_results'
 
 ## TEST FUNCTION DEFINITION
@@ -37,13 +37,13 @@ run_test_case() {
 	do
 		echo -e "$COLOUR_BG $i\e[0m"
 		echo "$CASE" > "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME"
-		$BIN_PATH $CASE >> "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME" &
+		$BIN_PATH $CASE >> "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME"
 		# echo "$CASE_NO - test$i" >> tests_log
-		# cat "$RESULTS_FOLDER/$CASE_NO/test$i" | grep 'die'
-		# sleep $time
+		cat "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME" | grep 'die'
+		sleep $time
 		i=$(( $i + 1 ))
 	done
-	sleep 3
+	# sleep 3
 	echo
 }
 

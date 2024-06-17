@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 00:54:17 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/15 16:17:11 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/17 20:07:47 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,20 @@
 
 void	get_forks(t_philo *philo)
 {
-	pthread_mutex_lock(philo->left_fork_mutex);
-	print_mutex(philo, EAT);
-	pthread_mutex_lock(philo->right_fork_mutex);
-	print_mutex(philo, EAT);
+	if (philo->id % 2)
+	{
+		pthread_mutex_lock(philo->left_fork_mutex);
+		print_mutex(philo, EAT);
+		pthread_mutex_lock(philo->right_fork_mutex);
+		print_mutex(philo, EAT);
+	}
+	else
+	{
+		pthread_mutex_lock(philo->right_fork_mutex);
+		print_mutex(philo, EAT);
+		pthread_mutex_lock(philo->left_fork_mutex);
+		print_mutex(philo, EAT);
+	}
 }
 
 void	eat(t_philo *philo)
