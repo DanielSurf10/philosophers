@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:12:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/17 23:15:46 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/18 00:29:55 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@
 
 enum e_status
 {
-	EAT,
+	GET_FORK,
+	EATING,
 	THINK,
 	SLEEP,
-	EATING
 };
 
-typedef struct timeval t_timeval;
+typedef struct timeval	t_timeval;
 
 typedef struct s_philo
 {
@@ -73,24 +73,24 @@ typedef struct s_main_data
 }	t_main_data;
 
 // philospher function
-void	*philosopher(void *arg);
+void		*philosopher(void *arg);
 
 // philosophers actions
 // void	wait_for_adjacent_philosophers_to_eat(t_philo *philo);
-void	get_forks(t_philo *philo);
-void	eat(t_philo *philo);
-void	philo_sleep(t_philo *philo);
-void	think(t_philo *philo);
+void		get_forks(t_philo *philo);
+void		eat(t_philo *philo);
+void		philo_sleep(t_philo *philo);
+void		think(t_philo *philo);
 
 // die logic
-void	wait_until_someone_finish_or_die(t_main_data *data);
+void		wait_until_someone_finish_or_die(t_main_data *data);
 
 // validation
 t_main_data	get_data(char **argv);
 
 // utils
-void	print_ms(t_timeval now, t_timeval start);
-void	print_mutex(t_philo *philo, int status);
-int		ternary(int condition, int if_true, int if_false);
+void		print_ms(t_timeval now, t_timeval start);
+void		print_mutex(t_philo *philo, int status);
+int			ternary(int condition, int if_true, int if_false);
 
 #endif

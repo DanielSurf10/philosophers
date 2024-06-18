@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 22:24:26 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/16 13:59:23 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/18 00:26:58 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@ static int	is_philo_died(t_philo *philo)
 
 	gettimeofday(&now, NULL);
 	milliseconds_now = (now.tv_sec * 1000000 + now.tv_usec) / 1000;
-	milliseconds_last_meal = (philo->last_eat.tv_sec * 1000000 + philo->last_eat.tv_usec) / 1000;
+	milliseconds_last_meal = (philo->last_eat.tv_sec * 1000000
+			+ philo->last_eat.tv_usec) / 1000;
 	milliseconds_since_last_meal = milliseconds_now - milliseconds_last_meal;
 	if (milliseconds_since_last_meal > philo->time_to_die
-		&& (philo->eat_count < philo->max_eat_count || philo->max_eat_count == -1))
+		&& (philo->eat_count < philo->max_eat_count
+			|| philo->max_eat_count == -1))
 	{
 		pthread_mutex_lock(philo->print);
 		print_ms(now, philo->start);
@@ -39,7 +41,7 @@ void	wait_until_someone_finish_or_die(t_main_data *data)
 {
 	int	i;
 	int	someone_died;
-	int everyone_finished_eating;
+	int	everyone_finished_eating;
 
 	someone_died = 0;
 	everyone_finished_eating = 0;
@@ -58,9 +60,8 @@ void	wait_until_someone_finish_or_die(t_main_data *data)
 			if (data->philos[i].eat_count < data->philos[i].max_eat_count
 				|| data->philos[i].max_eat_count == -1)
 				everyone_finished_eating = 0;
-			pthread_mutex_unlock(&data->philos[i].philo_mutex);
-			i++;
+			pthread_mutex_unlock(&data->philos[i++].philo_mutex);
 		}
-		usleep(1000);
+		usleep(500); // Talvez aqui mude
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 11:13:05 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/16 12:12:16 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/18 00:25:36 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_main_data	get_data(char **argv)
 	data.time_to_die = ft_atoi(argv[2]);
 	data.time_to_eat = ft_atoi(argv[3]);
 	data.time_to_sleep = ft_atoi(argv[4]);
-	data.max_eat_count = argv[5] ? ft_atoi(argv[5]) : -1;
+	data.max_eat_count = ternary(argv[5] == NULL, ft_atoi(argv[5]), -1);
 	data.max_eat_count = ternary(argv[5] != NULL, ft_atoi(argv[5]), -1);
 	gettimeofday(&data.start, NULL);
 	if (data.philos_count == -1 || data.time_to_die == -1
