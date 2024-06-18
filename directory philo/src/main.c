@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:19:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/17 20:14:17 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/17 22:05:56 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,9 @@ int	main(int argc, char *argv[])
 
 		data.philos[i].philos_count = data.philos_count;
 
-		printf("%i\n", i + 1);
+		// printf("%i\n", i + 1);
 		pthread_create(&data.philos[i].thread, NULL, philosopher, &data.philos[i]);
-		// usleep(500);
+		usleep(500);
 		i += 1;
 	}
 

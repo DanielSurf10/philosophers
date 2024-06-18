@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:12:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/16 12:26:35 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/17 23:15:46 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ enum e_status
 {
 	EAT,
 	THINK,
-	SLEEP
+	SLEEP,
+	EATING
 };
 
 typedef struct timeval t_timeval;

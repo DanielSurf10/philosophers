@@ -8,8 +8,8 @@ MAKEFILE_PATH="philo_"
 # BONUS_MAKEFILE_PATH=philo_bonus
 
 ## TEST PARAMETERS - CHANGE AS NEEDED
-NB_OF_TESTS=20
-RESULTS_FOLDER='/tmp/test_results'
+NB_OF_TESTS=50
+RESULTS_FOLDER='test_results'
 
 ## TEST FUNCTION DEFINITION
 run_test_case() {
@@ -37,9 +37,9 @@ run_test_case() {
 	do
 		echo -e "$COLOUR_BG $i\e[0m"
 		echo "$CASE" > "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME"
-		$BIN_PATH $CASE >> "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME"
+		$BIN_PATH $CASE >> "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME" &
 		# echo "$CASE_NO - test$i" >> tests_log
-		cat "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME" | grep 'die'
+		# cat "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME" | grep 'die'
 		sleep $time
 		i=$(( $i + 1 ))
 	done
@@ -51,23 +51,29 @@ run_test_case() {
 make -C $MAKEFILE_PATH && clear
 mkdir -p $RESULTS_FOLDER
 rm -rf $RESULTS_FOLDER/*
-# run_test_case "case_01" "1 400 100 100 7" "should-die"
-# run_test_case "case_02" "1 800 200 200 7" "should-die"
-# run_test_case "case_03" "2 100 200 200" "should-die"
-# run_test_case "case_04" "2 150 200 100" "should-die"
-# run_test_case "case_05" "2 150 360 100" "should-die"
-# run_test_case "case_06" "3 200 100 100 7" "should-die"
-# run_test_case "case_07" "4 310 200 100 7" "should-die"
-# run_test_case "case_08" "4 399 200 200 7" "should-die"
-# run_test_case "case_09" "5 200 100 100 7" "should-die"
+run_test_case "case_01" "1 400 100 100 7" "should-die"
+run_test_case "case_02" "1 800 200 200 7" "should-die"
+run_test_case "case_03" "2 100 200 200" "should-die"
+run_test_case "case_04" "2 150 200 100" "should-die"
+run_test_case "case_05" "2 150 360 100" "should-die"
+run_test_case "case_06" "3 200 100 100 7" "should-die"
+run_test_case "case_07" "4 310 200 100 7" "should-die"
+run_test_case "case_08" "4 399 200 200 7" "should-die"
+run_test_case "case_09" "5 200 100 100 7" "should-die"
+sleep 5
+echo -n '[N° tests] [N° dies]: '
+cat $(find test_results -name "*should*") | grep died | wc -l && find test_results -name "*should*" | wc -l
 
 run_test_case "case_10" "3 400 100 100 7" "not-die"
 run_test_case "case_11" "4 210 100 100 7" "not-die"
 run_test_case "case_12" "4 410 200 200 7" "not-die"
 run_test_case "case_13" "5 400 100 100 7" "not-die"
 run_test_case "case_14" "5 800 200 200 7" "not-die"
+sleep 5
+echo -n 'not-die: '
+cat $(find test_results -name "*not*") | grep died | wc -l
+
 make -C $MAKEFILE_PATH fclean
-# sleep 5
 
 # # UNCOMMENT BONUS TESTS IF NEEDED
 # make -C $MAKEFILE_PATH && clear
