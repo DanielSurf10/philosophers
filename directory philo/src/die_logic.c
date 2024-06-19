@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 22:24:26 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/18 00:26:58 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/18 23:55:40 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ static int	is_philo_died(t_philo *philo)
 			|| philo->max_eat_count == -1))
 	{
 		pthread_mutex_lock(philo->print);
+		print_color(CYAN);
 		print_ms(now, philo->start);
-		printf("%d died\n", philo->id + 1);
+		print_color(RST);
+		printf(YELLOW"%d"RED" died\n"RST, philo->id + 1);
 		pthread_mutex_unlock(philo->print);
 		return (1);
 	}

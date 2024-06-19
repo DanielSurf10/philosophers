@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 00:55:05 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/17 23:07:24 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/18 23:35:31 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,9 @@ int	ternary(int condition, int if_true, int if_false)
 	if (condition)
 		return (if_true);
 	return (if_false);
+}
+
+void	print_color(char *color)
+{
+	printf("%s", color);
 }

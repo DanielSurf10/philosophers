@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 15:54:50 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/18 00:27:42 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/18 23:51:23 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 
 static void	print_mutex_get_fork(t_philo *philo)
 {
-	printf("%i has taken a fork\n", philo->id + 1);
+	printf(PURPLE"%i"RST" has "GREY"taken a fork\n"RST, philo->id + 1);
 }
 
 static void	print_mutex_eating(t_philo *philo)
 {
-	printf("%i is eating\n", philo->id + 1);
+	printf(PURPLE"%i"RST" is "ORANGE"eating\n"RST, philo->id + 1);
 }
 
 static void	print_mutex_sleep(t_philo *philo)
 {
-	printf("%i is sleeping\n", philo->id + 1);
+	printf(PURPLE"%i"RST" is "BLUE"sleeping\n"RST, philo->id + 1);
 }
 
 static void	print_mutex_think(t_philo *philo)
 {
-	printf("%i is thinking\n", philo->id + 1);
+	printf(PURPLE"%i"RST" is "YELLOW"thinking\n"RST, philo->id + 1);
 }
 
 void	print_mutex(t_philo *philo, int status)
@@ -46,7 +46,9 @@ void	print_mutex(t_philo *philo, int status)
 	if (someone_died == 0)
 	{
 		pthread_mutex_lock(philo->print);
+		print_color(CYAN);
 		print_ms(now, start);
+		print_color(RST);
 		if (status == GET_FORK)
 			print_mutex_get_fork(philo);
 		else if (status == EATING)

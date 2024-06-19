@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:12:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/18 00:29:55 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/18 23:35:51 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,21 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/time.h>
+
+# define RST	"\001\033[0m\002"
+# define ORANGE	"\001\033[38;5;208m\002"
+# define BLUE	"\001\033[38;5;27m\002"
+# define GREEN	"\001\033[38;5;46m\002"
+# define RED	"\001\033[38;5;196m\002"
+# define YELLOW	"\001\033[38;5;226m\002"
+# define CYAN	"\001\033[38;5;51m\002"
+# define PURPLE	"\001\033[38;5;129m\002"
+# define GREY	"\001\033[38;5;240m\002"
+# define WHITE	"\001\033[38;5;231m\002"
+# define BLACK	"\001\033[38;5;16m\002"
+# define BOLD	"\001\033[1m\002"
+# define UNDER	"\001\033[4m\002"
+# define BLINK	"\001\033[5m\002"
 
 enum e_status
 {
@@ -92,5 +107,7 @@ t_main_data	get_data(char **argv);
 void		print_ms(t_timeval now, t_timeval start);
 void		print_mutex(t_philo *philo, int status);
 int			ternary(int condition, int if_true, int if_false);
+void		print_color(char *color);
+
 
 #endif
