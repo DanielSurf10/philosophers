@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 22:24:26 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/18 23:55:40 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/19 20:28:11 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,17 @@ void	wait_until_someone_finish_or_die(t_main_data *data)
 			pthread_mutex_lock(&data->philos[i].philo_mutex);
 			if (is_philo_died(&data->philos[i]))
 			{
+				pthread_mutex_lock(&data->someone_died_mutex);
 				data->someone_died = 1;
+				pthread_mutex_unlock(&data->someone_died_mutex);
 				someone_died = 1;
 			}
 			if (data->philos[i].eat_count < data->philos[i].max_eat_count
 				|| data->philos[i].max_eat_count == -1)
 				everyone_finished_eating = 0;
-			pthread_mutex_unlock(&data->philos[i++].philo_mutex);
+			pthread_mutex_unlock(&data->philos[i].philo_mutex);
+			i++;
 		}
-		usleep(500); // Talvez aqui mude
+		usleep(500);
 	}
 }

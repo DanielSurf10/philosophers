@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:12:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/18 23:35:51 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/19 20:39:08 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_philo
 	pthread_mutex_t	*print;
 	pthread_mutex_t	*left_fork_mutex;			// Ponteiro para um mutex do array de mutex dos forks
 	pthread_mutex_t	*right_fork_mutex;
+	pthread_mutex_t	*someone_died_mutex;
 	// pthread_mutex_t	*left_philo_mutex;			// Ponteiro para um mutex do philo da esquerda
 	// pthread_mutex_t	*right_philo_mutex;			// Ponteiro para um mutex do philo da direita
 }	t_philo;
@@ -84,6 +85,7 @@ typedef struct s_main_data
 	t_philo			*philos;
 	pthread_mutex_t	*forks_mutex;			// Array de mutex dos forks
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	someone_died_mutex;
 	t_timeval		start;
 }	t_main_data;
 
@@ -105,9 +107,14 @@ t_main_data	get_data(char **argv);
 
 // utils
 void		print_ms(t_timeval now, t_timeval start);
-void		print_mutex(t_philo *philo, int status);
 int			ternary(int condition, int if_true, int if_false);
 void		print_color(char *color);
 
+// print mutex
+void		print_mutex(t_philo *philo, int status);
+void		print_mutex_get_fork(t_philo *philo);
+void		print_mutex_eating(t_philo *philo);
+void		print_mutex_sleep(t_philo *philo);
+void		print_mutex_think(t_philo *philo);
 
 #endif

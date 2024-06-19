@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:19:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/18 00:25:46 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/19 19:27:08 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	main(int argc, char *argv[])
 	memset(data.philos, 0, sizeof(t_philo) * data.philos_count);
 
 	pthread_mutex_init(&data.print_mutex, NULL);
+	pthread_mutex_init(&data.someone_died_mutex, NULL);
 
 	// data.forks = malloc(sizeof(int) * data.philos_count);
 	// memset(data.forks, 0, sizeof(int) * data.philos_count);
@@ -72,7 +73,7 @@ int	main(int argc, char *argv[])
 		// data.philos[i].left_philo_eat_count = &data.philos[(i + data.philos_count - 1) % data.philos_count].eat_count;
 		// data.philos[i].right_philo_eat_count = &data.philos[(i + 1) % data.philos_count].eat_count;
 
-		// // Forks
+		// Forks
 		// data.philos[i].left_fork = &data.forks[(i + data.philos_count - 1) % data.philos_count];
 		// data.philos[i].right_fork = &data.forks[i];
 
@@ -86,12 +87,12 @@ int	main(int argc, char *argv[])
 		data.philos[i].right_fork_mutex = &data.forks_mutex[i];
 		// data.philos[i].left_philo_mutex = &data.philos[(i + data.philos_count - 1) % data.philos_count].philo_mutex;
 		// data.philos[i].right_philo_mutex = &data.philos[(i + 1) % data.philos_count].philo_mutex;
+		data.philos[i].someone_died_mutex = &data.someone_died_mutex;
 
 		data.philos[i].philos_count = data.philos_count;
 
-		// printf("%i\n", i + 1);
 		pthread_create(&data.philos[i].thread, NULL, philosopher, &data.philos[i]);
-		usleep(500);
+		usleep(1000);
 		i++;
 	}
 
@@ -105,6 +106,7 @@ int	main(int argc, char *argv[])
 	}
 
 	pthread_mutex_destroy(&data.print_mutex);
+	pthread_mutex_destroy(&data.someone_died_mutex);
 
 	i = 0;
 	while (i < data.philos_count)

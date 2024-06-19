@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 00:13:14 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/18 00:18:14 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/19 18:56:08 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,14 @@ void	*philosopher(void *arg)
 		philo_sleep(philo);
 		think(philo);
 		pthread_mutex_lock(&philo->philo_mutex);
+		pthread_mutex_lock(philo->someone_died_mutex);
 		someone_died = *philo->someone_died;
+		pthread_mutex_unlock(philo->someone_died_mutex);
 		philo->eat_count++;
 		pthread_mutex_unlock(&philo->philo_mutex);
 		cycle_count++;
 	}
+	if (philo->philos_count == 1)
+		print_mutex(philo, GET_FORK);
 	return (NULL);
 }
