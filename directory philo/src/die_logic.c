@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 22:24:26 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/19 20:28:11 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/20 11:50:20 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ static int	is_philo_died(t_philo *philo)
 	return (0);
 }
 
+static void	set_someone_died(t_main_data *data)
+{
+	pthread_mutex_lock(&data->someone_died_mutex);
+	data->someone_died = 1;
+	pthread_mutex_unlock(&data->someone_died_mutex);
+}
+
 void	wait_until_someone_finish_or_die(t_main_data *data)
 {
 	int	i;
@@ -54,13 +61,9 @@ void	wait_until_someone_finish_or_die(t_main_data *data)
 		while (i < data->philos_count && someone_died == 0)
 		{
 			pthread_mutex_lock(&data->philos[i].philo_mutex);
-			if (is_philo_died(&data->philos[i]))
-			{
-				pthread_mutex_lock(&data->someone_died_mutex);
-				data->someone_died = 1;
-				pthread_mutex_unlock(&data->someone_died_mutex);
-				someone_died = 1;
-			}
+			someone_died = is_philo_died(&data->philos[i]);
+			if (someone_died)
+				set_someone_died(data);
 			if (data->philos[i].eat_count < data->philos[i].max_eat_count
 				|| data->philos[i].max_eat_count == -1)
 				everyone_finished_eating = 0;

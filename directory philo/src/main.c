@@ -6,13 +6,20 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 22:19:55 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/19 23:38:54 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/20 12:29:37 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
 // ./philo <philo_number> <time_to_die> <time_to_eat> <time_to_sleep> [max_eat]
+
+int print_argv(int argc, char **argv)
+{
+	for (int i = 0; i < argc; i++)
+		fprintf(stderr, "%s ", argv[i]);
+	fprintf(stderr, "\n");
+}
 
 int	main(int argc, char *argv[])
 {
@@ -24,6 +31,7 @@ int	main(int argc, char *argv[])
 		write(2, "Invalid argument number!\n", 25);
 		return (1);
 	}
+	print_argv(argc, argv);
 
 	data = get_data(argv);
 

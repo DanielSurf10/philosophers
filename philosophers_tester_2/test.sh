@@ -50,7 +50,7 @@ run_test_case() {
 	if [[ $EXPECTED_OUTCOME == "should-die" ]]
 	then
 		echo -n '[N° tests] [N° dies]: '
-		cat $(find test_results -name "*should*")'' | grep died | wc -l | tr '\n' ' ' && find test_results -name "*should*" | wc -l
+		cat $(find test_results -name "test*-$EXPECTED_OUTCOME-$CASE_FILE")'' | grep died | wc -l | tr '\n' ' ' && find test_results -name "test*-$EXPECTED_OUTCOME-$CASE_FILE" | wc -l
 	else
 		echo -n 'test number: '
 		find test_results -name "test*-$EXPECTED_OUTCOME-$CASE_FILE" | wc -l
@@ -76,7 +76,7 @@ run_test_case "case_08" "4 399 200 200 7" "should-die"
 run_test_case "case_09" "5 200 100 100 7" "should-die"
 # sleep 5
 echo -n '[N° tests] [N° dies]: '
-cat $(find test_results -name "*should*") | grep died | wc -l | tr -d '\n' && find test_results -name "*should*" | wc -l
+cat $(find test_results -name "*should*") | grep died | wc -l | tr '\n' ' ' && find test_results -name "*should*" | wc -l
 
 run_test_case "case_10" "3 400 100 100 7" "not-die"
 run_test_case "case_11" "4 210 100 100 7" "not-die"
