@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 00:54:17 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/19 20:39:26 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/19 23:54:42 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,14 @@ void	philo_sleep(t_philo *philo)
 
 void	think(t_philo *philo)
 {
+	int	time_to_think;
+
+	time_to_think = philo->time_to_die - philo->time_to_eat
+		- philo->time_to_sleep;
+	if (time_to_think > 10)
+		time_to_think = 10;
+	else if (time_to_think < 0)
+		time_to_think = 0;
 	print_mutex(philo, THINK);
-	usleep(1000);
+	usleep(time_to_think * 300);
 }
