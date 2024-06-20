@@ -14,7 +14,7 @@ def generate_times(number_of_philosophers):
     time_to_sleep = random.randint(min_time_to_sleep, max_time_to_sleep)
 
     # Margem de segurança
-    min_margem = 50
+    min_margem = 10
     max_margem = 50
     margem_de_segurança = random.randint(min_margem, max_margem)
 

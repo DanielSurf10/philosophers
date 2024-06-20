@@ -6,18 +6,30 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 00:13:14 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/19 18:56:08 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/20 19:00:43 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+static int	get_someone_died_and_set_eat_count(t_philo *philo)
+{
+	int	someone_died;
+
+	pthread_mutex_lock(&philo->philo_mutex);
+	pthread_mutex_lock(philo->someone_died_mutex);
+	someone_died = *philo->someone_died;
+	pthread_mutex_unlock(philo->someone_died_mutex);
+	philo->eat_count++;
+	pthread_mutex_unlock(&philo->philo_mutex);
+	return (someone_died);
+}
 
 void	*philosopher(void *arg)
 {
 	int				cycle_count;
 	int				someone_died;
 	t_philo			*philo;
-	t_timeval		now;
 
 	philo = (t_philo *) arg;
 	cycle_count = 0;
@@ -32,12 +44,7 @@ void	*philosopher(void *arg)
 		eat(philo);
 		philo_sleep(philo);
 		think(philo);
-		pthread_mutex_lock(&philo->philo_mutex);
-		pthread_mutex_lock(philo->someone_died_mutex);
-		someone_died = *philo->someone_died;
-		pthread_mutex_unlock(philo->someone_died_mutex);
-		philo->eat_count++;
-		pthread_mutex_unlock(&philo->philo_mutex);
+		someone_died = get_someone_died_and_set_eat_count(philo);
 		cycle_count++;
 	}
 	if (philo->philos_count == 1)

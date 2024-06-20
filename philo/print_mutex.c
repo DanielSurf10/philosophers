@@ -6,11 +6,23 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 15:54:50 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/19 20:34:01 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:54:37 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+static int	get_someone_died(t_philo *philo)
+{
+	int	someone_died;
+
+	pthread_mutex_lock(&philo->philo_mutex);
+	pthread_mutex_lock(philo->someone_died_mutex);
+	someone_died = *philo->someone_died;
+	pthread_mutex_unlock(philo->someone_died_mutex);
+	pthread_mutex_unlock(&philo->philo_mutex);
+	return (someone_died);
+}
 
 void	print_mutex(t_philo *philo, int status)
 {
@@ -19,12 +31,8 @@ void	print_mutex(t_philo *philo, int status)
 	t_timeval	start;
 
 	gettimeofday(&now, NULL);
-	pthread_mutex_lock(&philo->philo_mutex);
 	start = philo->start;
-	pthread_mutex_lock(philo->someone_died_mutex);
-	someone_died = *philo->someone_died;
-	pthread_mutex_unlock(philo->someone_died_mutex);
-	pthread_mutex_unlock(&philo->philo_mutex);
+	someone_died = get_someone_died(philo);
 	if (someone_died == 0)
 	{
 		pthread_mutex_lock(philo->print);

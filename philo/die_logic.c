@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 22:24:26 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/20 11:50:20 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/20 17:08:31 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	is_philo_died(t_philo *philo)
 		print_color(CYAN);
 		print_ms(now, philo->start);
 		print_color(RST);
-		printf(YELLOW"%d"RED" died\n"RST, philo->id + 1);
+		printf(YELLOW"%d"RED" died"RST"\n", philo->id + 1);
 		pthread_mutex_unlock(philo->print);
 		return (1);
 	}

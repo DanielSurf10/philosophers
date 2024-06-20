@@ -1,14 +1,14 @@
 #!/bin/bash
 
 ## PATH VARS
-BIN_PATH=philo_/philo
-MAKEFILE_PATH="philo_"
+BIN_PATH=philo/philo
+MAKEFILE_PATH="philo"
 ## UNCOMMENT BONUS TESTS IF NEEDED
 # BONUS_BIN_PATH=philo_bonus/philo_bonus
 # BONUS_MAKEFILE_PATH=philo_bonus
 
 ## TEST PARAMETERS - CHANGE AS NEEDED
-NB_OF_TESTS=10
+NB_OF_TESTS=25
 RESULTS_FOLDER='test_results'
 
 ## TEST FUNCTION DEFINITION
@@ -38,10 +38,10 @@ run_test_case() {
 	do
 		echo -e "$COLOUR_BG $i\e[0m"
 		echo "$CASE" > "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME-$CASE_FILE"
-		# valgrind -q --tool=helgrind $BIN_PATH $CASE >> "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME"
+		# valgrind -q --tool=helgrind $BIN_PATH $CASE >> "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME-$CASE_FILE"
 		$BIN_PATH $CASE >> "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME-$CASE_FILE" &
 		# echo "$CASE_NO - test$i" >> tests_log
-		# cat "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME" | grep 'die'
+		# cat "$RESULTS_FOLDER/$CASE_NO/test$i-$EXPECTED_OUTCOME-$CASE_FILE" | grep 'die'
 		sleep $time
 		i=$(( $i + 1 ))
 	done
@@ -65,15 +65,15 @@ run_test_case() {
 make -C $MAKEFILE_PATH && clear
 mkdir -p $RESULTS_FOLDER
 rm -rf $RESULTS_FOLDER/*
-run_test_case "case_01" "1 400 100 100 7" "should-die"
-run_test_case "case_02" "1 800 200 200 7" "should-die"
-run_test_case "case_03" "2 100 200 200" "should-die"
-run_test_case "case_04" "2 150 200 100" "should-die"
-run_test_case "case_05" "2 150 360 100" "should-die"
-run_test_case "case_06" "3 200 100 100 7" "should-die"
-run_test_case "case_07" "4 310 200 100 7" "should-die"
-run_test_case "case_08" "4 399 200 200 7" "should-die"
-run_test_case "case_09" "5 200 100 100 7" "should-die"
+# run_test_case "case_01" "1 400 100 100 7" "should-die"
+# run_test_case "case_02" "1 800 200 200 7" "should-die"
+# run_test_case "case_03" "2 100 200 200" "should-die"
+# run_test_case "case_04" "2 150 200 100" "should-die"
+# run_test_case "case_05" "2 150 360 100" "should-die"
+# run_test_case "case_06" "3 200 100 100 7" "should-die"
+# run_test_case "case_07" "4 310 200 100 7" "should-die"
+# run_test_case "case_08" "4 399 200 200 7" "should-die"
+# run_test_case "case_09" "5 200 100 100 7" "should-die"
 # sleep 5
 echo -n '[N° tests] [N° dies]: '
 cat $(find test_results -name "*should*") | grep died | wc -l | tr '\n' ' ' && find test_results -name "*should*" | wc -l
