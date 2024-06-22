@@ -1,14 +1,14 @@
 all:
-	@make -C "directory philo"
-	@cp "directory philo/philo" .
+	@make -C "philo"
+	@cp "philo/philo" philo_
 
 fclean:
-	@make -C "directory philo" fclean
+	@make -C "philo" fclean
 
 val:
-	@make -C "directory philo" val
+	@make -C "philo" val
 
 hell:
-	@make -C "directory philo" hell
+	@make -C "philo" hell
 
 re: fclean all

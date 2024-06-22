@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 15:54:50 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/20 16:54:37 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/21 14:13:18 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ void	print_mutex(t_philo *philo, int status)
 	if (someone_died == 0)
 	{
 		pthread_mutex_lock(philo->print);
-		print_color(CYAN);
+		if (isatty(STDOUT_FILENO))
+			print_color(CYAN);
 		print_ms(now, start);
-		print_color(RST);
+		if (isatty(STDOUT_FILENO))
+			print_color(RST);
 		if (status == GET_FORK)
 			print_mutex_get_fork(philo);
 		else if (status == EATING)
