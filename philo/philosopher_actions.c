@@ -6,7 +6,7 @@
 /*   By: danbarbo <danbarbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 00:54:17 by danbarbo          #+#    #+#             */
-/*   Updated: 2024/06/20 18:47:18 by danbarbo         ###   ########.fr       */
+/*   Updated: 2024/06/22 22:37:30 by danbarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ void	eat(t_philo *philo)
 {
 	print_mutex(philo, EATING);
 	usleep(philo->time_to_eat * 1000);
-	pthread_mutex_unlock(philo->left_fork_mutex);
-	pthread_mutex_unlock(philo->right_fork_mutex);
 }
 
 void	philo_sleep(t_philo *philo)
 {
 	print_mutex(philo, SLEEP);
+	pthread_mutex_unlock(philo->left_fork_mutex);
+	pthread_mutex_unlock(philo->right_fork_mutex);
 	usleep(philo->time_to_sleep * 1000);
 }
 
