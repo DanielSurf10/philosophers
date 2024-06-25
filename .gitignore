@@ -1,2 +1,4 @@
 *.o
 test_results
+philo_
+philo/philo
